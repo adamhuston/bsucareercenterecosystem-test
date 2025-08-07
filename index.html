@@ -1,0 +1,425 @@
+<html>
+<head>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/networkgraph.js"></script>
+    <style>
+        br {
+            display: block;
+            margin: 5px 0;
+        }
+
+        #container {
+            width: 100%;
+            height: 1000px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .highcharts-tooltip span {
+            pointer-events: auto; /* Allow interaction with tooltip content */
+            padding: 6px;
+        }
+
+        .highcharts-point {
+            cursor: grab;
+        }
+        
+        .highcharts-point:active {
+            cursor: grabbing;
+        }
+         /* Fullscreen button styles */
+        #fullscreen-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: #BA0C2F;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease;
+        }
+        
+        #fullscreen-btn:hover {
+            background: #79242F;
+        }
+        
+        /* Fullscreen container styles */
+        .fullscreen-mode {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        /* Hide scrollbars in fullscreen */
+        .fullscreen-mode body {
+            overflow: hidden !important;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="fullscreen-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+
+    <div id="container"></div>
+
+    <script>
+        
+
+        // Highcharts configuration
+        var G000 = "#33ffbd";
+        var card = "#BA0C2F";
+        var darkred = "#79242F";
+        var black = "#000000";
+        var dgray = "#54585A";
+        var lgray = "#E6E7E8";
+        var white = "#FFFFFF";
+
+        // Fullscreen functionality for embedded environments
+        //let isFullscreen = false;
+        //let chart; // Store chart reference
+        //let originalStyles = {}; // Store original container styles
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.getElementById('container').requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        //function toggleFullscreen() {
+        //    const container = document.getElementById('container');
+        //    const button = document.getElementById('fullscreen-btn');
+        //    
+        //    if (!isFullscreen) {
+        //        // Store original styles
+        //        originalStyles = {
+        //            position: container.style.position,
+        //            top: container.style.top,
+        //            left: container.style.left,
+        //            width: container.style.width,
+        //            height: container.style.height,
+        //            zIndex: container.style.zIndex,
+        //            background: container.style.background
+        //        };
+                
+                // Enter fullscreen mode
+        //        container.classList.add('fullscreen-mode');
+        //        button.innerHTML = '✕ Exit Fullscreen';
+        //        button.style.zIndex = '10000'; // Ensure button stays on top
+         //       document.body.style.overflow = 'hidden';
+          //      isFullscreen = true;
+        //        
+                // Get the chart instance and resize it
+        //        const chartContainer = Highcharts.charts.find(chart => chart && chart.container.parentNode === container);
+         //       if (chartContainer) {
+        //            chart = chartContainer;
+         //           setTimeout(() => {
+        //                chart.setSize(window.innerWidth, window.innerHeight - 60); // Account for button
+         //           }, 100);
+        //        }
+         //   } else {
+        //        // Exit fullscreen mode
+         //       container.classList.remove('fullscreen-mode');
+        //        
+         //       // Restore original styles
+        //        Object.keys(originalStyles).forEach(key => {
+         //           if (originalStyles[key]) {
+        //                container.style[key] = originalStyles[key];
+         //           } else {
+        //                container.style[key] = '';
+         //           }
+        //        });
+                
+        //        button.innerHTML = '⛶ Fullscreen';
+        //        button.style.zIndex = '1000';
+        //        document.body.style.overflow = 'auto';
+        //        isFullscreen = false;
+                
+                // Resize chart back to original size
+        //        if (chart) {
+         //           setTimeout(() => {
+           //             chart.setSize(null, 1000); // Back to original height
+          //              chart.reflow(); // Ensure proper rendering
+          //          }, 100);
+         //       }
+        //    }
+        //}
+
+        // Handle ESC key to exit fullscreen
+        //document.addEventListener('keydown', function(event) {
+        //    if (event.key === 'Escape' && isFullscreen) {
+        //        toggleFullscreen();
+        //    }
+        //});
+
+        // Handle window resize in fullscreen mode
+        //window.addEventListener('resize', function() {
+        //    if (isFullscreen && chart) {
+        //        chart.setSize(window.innerWidth, window.innerHeight - 60);
+        //    }
+        //});
+
+        Highcharts.theme = {
+            colors: [G000, card, darkred, black, dgray, lgray, white],
+            chart: {
+                backgroundColor: white,
+                style: {
+                    fontFamily: 'Open Sans, Arial, sans-serif',
+                    fontSize: '1.2em'
+                }
+            },
+            title: {
+                style: {
+                    color: black
+                }
+            },
+            subtitle: {
+                style: {
+                    color: black,
+
+                }
+            },
+            legend: {
+                itemStyle: {
+                    color: black
+                },
+                itemHoverStyle: {
+                    color: black
+                }
+            }
+        };
+        Highcharts.setOptions(Highcharts.theme);
+
+        Highcharts.chart('container', {
+            chart: {
+                type: 'networkgraph',
+                marginTop: 80
+            },
+            style: {
+                backgroundColor: dgray,
+                fontFamily: 'monospace',
+                fontSize: '1.2em'
+            },
+            title: {
+                text: ''
+            },
+            credits: { enabled: false },
+            plotOptions: {
+                networkgraph: {
+                    keys: ['from', 'to', 'color'],
+                    draggable: true,
+                    layoutAlgorithm: {
+                        enableSimulation: true,
+                        linkLength: 200,
+                        integration: 'verlet',
+                        friction: -0.90,
+                        maxSpeed: 200,
+                        maxIterations: 700
+                    },
+                    animation: {
+                        duration: 500
+                    }
+                }
+            },
+            tooltip: {
+                useHTML: true, // Enable HTML rendering for tooltips
+                style: {
+                    width: '400px',
+                    textAlign: 'center',
+                },
+                formatter: function () {
+                    const additionalInfo = {
+                        'Career Committee': 'Connects families directly with the university’s career development efforts by channeling their insight and support into initiatives that expand student opportunities and strengthen employer relationships.',
+                        'KEY Careers': 'Accelerates student readiness and postgraduation outcomes by guiding early exploration, reducing uncertainty, and connecting academic experiences to real-world career goals.',
+                        'Skills Infusion': 'Aligns classroom learning with career readiness by bringing faculty, alumni, and employers together to integrate in-demand workplace competencies into student learning outcomes.',
+                        'Faculty Externships': 'Bridges academia and industry by embedding faculty in real-world work environments, enabling them to bring current, career-relevant insights back into the classroom.',
+                        'Indiana Connection Lounge': 'Activates one-on-one and small-group introductions between students, alumni, and employers—creating intentional, relationship-based pathways to internships and jobs.',
+                        'Practice Interview': 'Equips students with confidence and strategy by offering hands-on mock interviews that simulate real scenarios and sharpen professional communication skills.',
+                        'On Campus Student Employment': 'Creates pathways for financial independence and career exploration while providing departments and employers with adaptable talent that helps drive innovation and operations.',
+                        'Competency Measures': 'Tracks and reinforces students’ career readiness by embedding and assessing NACE Career Competencies across programs, helping students articulate their strengths to employers.',
+                        'Experience Journal': 'Promotes self-awareness and career clarity by guiding students to reflect on how they’re building core competencies through academic, co-curricular, and work-based experiences.',
+                        'County Ambassadors': 'Builds pride and peer-to-peer engagement by empowering students to promote their hometowns and foster meaningful connections across Indiana’s diverse communities.',
+                        'Social Capital Building': 'Develops students’ professional networks through intentional use of university services, programs, and events—helping them form lasting connections that unlock career opportunities.',
+                        'Job Fairs': 'Drives employment outcomes by hosting events that directly connect students with hiring employers, contributing to Ball State’s high placement rates and industry engagement.'
+                        };
+
+
+                    const links = {
+                        'Career Committee': 'https://www.bsu.edu/about/administrativeoffices/student-affairs/services-and-resources/parents-advisory-council',
+                        'KEY Careers': 'https://www.bsu.edu/about/administrativeoffices/careercenter/programs-services/keycareers',
+                        'Skills Infusion': 'https://www.bsu.edu/about/administrativeoffices/careercenter/programs-services/skills-infusion-program',
+                        'Faculty Externships': 'https://www.bsu.edu/about/administrativeoffices/careercenter/programs-services/faculty-externship-program',
+                        'Indiana Connection Lounge': 'https://www.bsu.edu/about/administrativeoffices/careercenter/indiana-connection-lounge',
+                        'Practice Interview': 'https://www.bsu.edu/about/administrativeoffices/careercenter/programs-services/interview-assistance',
+                        'On Campus Student Employment': 'https://www.bsu.edu/about/administrativeoffices/careercenter/student-employment',
+                        'Competency Measures': 'https://www.naceweb.org/docs/default-source/default-document-library/2024/resources/nace-career-readiness-competencies-revised-apr-2024.pdf',
+                        'Experience Journal': 'https://www.bsu.edu/experiencejournal',
+                        'County Ambassadors': 'https://www.bsu.edu/about/administrativeoffices/governmental-relations/county-ambassador-program',
+                        'Social Capital Building': 'https://magazine.bsu.edu/2024/10/01/enhancing-student-employer-engagement/',
+                        'Job Fairs': 'https://www.bsu.edu/about/administrativeoffices/careercenter/job-fairs',
+                        // Add more links as needed
+                    };
+
+                    const link = links[this.key] ? `<br><a href="${links[this.key]}" target="_blank" style="display: inline-block; text-align: center; width: 100%; margin: 0 auto;">Learn more</a>` : '';
+                    return `<b>${this.key}</b><br>${additionalInfo[this.key] || 'No additional information available.'}${link}`;
+                }
+            },
+            series: [{
+                marker: {
+                    radius: 32,
+                },
+                dataLabels: {
+                    enabled: true,
+                    linkFormat: '',
+                    allowOverlap: true
+                },
+                data: [],
+                events: {
+                    click: function (event) {
+                        const nodeId = event.point.id;
+                        console.log(nodeId);
+                        console.log(this.chart.series);
+                        let newData = [];
+                        switch (nodeId) {
+                            case 'Parents':
+                                newData = [
+                                    ['Parents', 'Career Committee', darkred]
+                                ];
+                                break;
+                            case 'Employers':
+                                newData = [
+                                    ['Employers', 'Skills Infusion', darkred],
+                                    ['Employers', 'Faculty Externships', darkred],
+                                    ['Employers', 'Social Capital Building', darkred],
+                                    ['Employers', 'Indiana Connection Lounge', darkred],
+                                    ['Employers', 'Practice Interview', darkred],
+                                    ['Employers', 'Job Fairs', darkred]
+                                ];
+                                break;
+                            case 'Industry':
+                                newData = [
+                                    ['Industry', 'Skills Infusion', darkred],
+                                    ['Industry', 'Faculty Externships', darkred],
+                                    ['Industry', 'Social Capital Building', darkred],
+                                    ['Industry', 'Indiana Connection Lounge', darkred],
+                                    ['Industry', 'Practice Interview', darkred],
+                                    ['Industry', 'Job Fairs', darkred]
+                                ];
+                                break;
+                            case 'Alumni':
+                                newData = [
+                                    ['Alumni', 'Skills Infusion', darkred],
+                                    ['Alumni', 'Faculty Externships', darkred],
+                                    ['Alumni', 'Social Capital Building', darkred],
+                                    ['Alumni', 'Practice Interview', darkred],
+                                    ['Alumni', 'Job Fairs', darkred]
+                                ];
+                                break;
+                            case 'Students':
+                                newData = [
+                                    ['Students', 'Experience Journal', darkred],
+                                    ['Students', 'Social Capital Building', darkred],
+                                    ['Students', 'Competency Measures', darkred],
+                                    ['Students', 'Indiana Connection Lounge', darkred],
+                                    ['Students', 'County Ambassadors', darkred],
+                                    ['Students', 'Practice Interview', darkred],
+                                    ['Students', 'On Campus Student Employment', darkred],
+                                    ['Students', 'KEY Careers', darkred],
+                                    ['Students', 'Job Fairs', darkred]
+                                ];
+                                break;
+                            case 'Faculty':
+                                newData = [
+                                    ['Faculty', 'Faculty Externships', darkred],
+                                    ['Faculty', 'Skills Infusion', darkred],
+                                    ['Faculty', 'Experience Journal', darkred],
+                                    ['Faculty', 'Indiana Connection Lounge', darkred],
+                                    ['Faculty', 'Practice Interview', darkred]
+                                ];
+                                break;
+                            case 'All Populations':
+                                newData = [
+                                    ['Faculty', 'Faculty Externships', darkred],
+                                    ['Faculty', 'Skills Infusion', darkred],
+                                    ['Faculty', 'Experience Journal', darkred],
+                                    ['Faculty', 'Indiana Connection Lounge', darkred],
+                                    ['Faculty', 'Practice Interview', darkred],
+                                    ['Students', 'Experience Journal', darkred],
+                                    ['Students', 'Social Capital Building', darkred],
+                                    ['Students', 'Competency Measures', darkred],
+                                    ['Students', 'Indiana Connection Lounge', darkred],
+                                    ['Students', 'County Ambassadors', darkred],
+                                    ['Students', 'Practice Interview', darkred],
+                                    ['Students', 'On Campus Student Employment', darkred],
+                                    ['Students', 'KEY Careers', darkred],
+                                    ['Students', 'Job Fairs', darkred],
+                                    ['Alumni', 'Skills Infusion', darkred],
+                                    ['Alumni', 'Faculty Externships', darkred],
+                                    ['Alumni', 'Social Capital Building', darkred],
+                                    ['Alumni', 'Practice Interview', darkred],
+                                    ['Alumni', 'Job Fairs', darkred],
+                                    ['Industry', 'Skills Infusion', darkred],
+                                    ['Industry', 'Faculty Externships', darkred],
+                                    ['Industry', 'Social Capital Building', darkred],
+                                    ['Industry', 'Indiana Connection Lounge', darkred],
+                                    ['Industry', 'Practice Interview', darkred],
+                                    ['Industry', 'Job Fairs', darkred],
+                                    ['Employers', 'Skills Infusion', darkred],
+                                    ['Employers', 'Faculty Externships', darkred],
+                                    ['Employers', 'Social Capital Building', darkred],
+                                    ['Employers', 'Indiana Connection Lounge', darkred],
+                                    ['Employers', 'Practice Interview', darkred],
+                                    ['Employers', 'Job Fairs', darkred],
+                                    ['Parents', 'Career Committee', darkred],
+                                    ['Parents', 'Students', darkred]
+
+                                ];
+                                break;
+                            default:
+                                return;
+                        }
+
+                        if (this.chart.series && this.chart.series[0]) {
+                            this.chart.series[0].setData(newData);
+                        } else {
+                            console.error('Series data is not available.');
+                        }
+                    }
+                },
+                nodes: [
+                    { id: 'Faculty', color: card },
+                    { id: 'Students', color: card },
+                    { id: 'Alumni', color: card },
+                    { id: 'Employers', color: card },
+                    { id: 'Industry', color: card },
+                    { id: 'Parents', color: card },
+                    { id: 'Career Committee', color: lgray },
+                    { id: 'Skills Infusion', color: lgray },
+                    { id: 'Faculty Externships', color: lgray },
+                    { id: 'Experience Journal', color: lgray },
+                    { id: 'Social Capital Building', color: lgray },
+                    { id: 'Competency Measures', color: lgray },
+                    { id: 'Indiana Connection Lounge', color: lgray },
+                    { id: 'County Ambassadors', color: lgray },
+                    { id: 'Practice Interview', color: lgray },
+                    { id: 'On Campus Student Employment', color: lgray },
+                    { id: 'KEY Careers', color: lgray },
+                    { id: 'Job Fairs', color: lgray },
+                    { id: 'All Populations', color: darkred}
+                ]
+            }]
+        });
+    </script>
+</body>
+</html>
