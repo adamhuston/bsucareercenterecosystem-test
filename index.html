@@ -90,85 +90,85 @@
         let isFullscreen = false;
         let chart; // Store chart reference
         let originalStyles = {}; // Store original container styles
-        // function toggleFullscreen() {
-        //    if (!document.fullscreenElement) {
-        //        document.getElementById('container').requestFullscreen();
-        //    } else {
-        //        document.exitFullscreen();
-        //    }
-        // }
         function toggleFullscreen() {
-            const container = document.getElementById('container');
-            const button = document.getElementById('fullscreen-btn');
-            
-            if (!isFullscreen) {
-                // Store original styles
-                originalStyles = {
-                    position: container.style.position,
-                    top: container.style.top,
-                    left: container.style.left,
-                    width: container.style.width,
-                    height: container.style.height,
-                    zIndex: container.style.zIndex,
-                    background: container.style.background
-                };
-                
-                // Enter fullscreen mode
-                container.classList.add('fullscreen-mode');
-                button.innerHTML = '✕ Exit Fullscreen';
-                button.style.zIndex = '10000'; // Ensure button stays on top
-                document.body.style.overflow = 'hidden';
-                isFullscreen = true;
-                
-                // Get the chart instance and resize it
-                const chartContainer = Highcharts.charts.find(chart => chart && chart.container.parentNode === container);
-                if (chartContainer) {
-                    chart = chartContainer;
-                    setTimeout(() => {
-                        chart.setSize(window.innerWidth, window.innerHeight - 60); // Account for button
-                    }, 100);
-                }
+        if (!document.fullscreenElement) {
+                document.getElementById('container').requestFullscreen();
             } else {
-                // Exit fullscreen mode
-                container.classList.remove('fullscreen-mode');
-                
-                // Restore original styles
-                Object.keys(originalStyles).forEach(key => {
-                    if (originalStyles[key]) {
-                        container.style[key] = originalStyles[key];
-                    } else {
-                        container.style[key] = '';
-                    }
-                });
-                
-                button.innerHTML = '⛶ Fullscreen';
-                button.style.zIndex = '1000';
-                document.body.style.overflow = 'auto';
-                isFullscreen = false;
-                
-                // Resize chart back to original size
-                if (chart) {
-                    setTimeout(() => {
-                        chart.setSize(null, 1000); // Back to original height
-                        chart.reflow(); // Ensure proper rendering
-                    }, 100);
-                }
+                document.exitFullscreen();
             }
         }
+        //function toggleFullscreen() {
+        //    const container = document.getElementById('container');
+        //    const button = document.getElementById('fullscreen-btn');
+        //    
+        //    if (!isFullscreen) {
+        //        // Store original styles
+        //        originalStyles = {
+        //            position: container.style.position,
+        //            top: container.style.top,
+        //            left: container.style.left,
+        //            width: container.style.width,
+        //            height: container.style.height,
+        //            zIndex: container.style.zIndex,
+        //            background: container.style.background
+        //        };
+        //        
+        //        // Enter fullscreen mode
+        //        container.classList.add('fullscreen-mode');
+        //        button.innerHTML = '✕ Exit Fullscreen';
+        //        button.style.zIndex = '10000'; // Ensure button stays on top
+        //        document.body.style.overflow = 'hidden';
+        //        isFullscreen = true;
+        //        
+        //        // Get the chart instance and resize it
+        //        const chartContainer = Highcharts.charts.find(chart => chart && chart.container.parentNode === container);
+        //        if (chartContainer) {
+        //            chart = chartContainer;
+        //            setTimeout(() => {
+        //                chart.setSize(window.innerWidth, window.innerHeight - 60); // Account for button
+        //            }, 100);
+        //        }
+        //    } else {
+        //        // Exit fullscreen mode
+        //        container.classList.remove('fullscreen-mode');
+        //        
+        //        // Restore original styles
+        //        Object.keys(originalStyles).forEach(key => {
+        //            if (originalStyles[key]) {
+        //                container.style[key] = originalStyles[key];
+        //            } else {
+        //                container.style[key] = '';
+        //            }
+        //        });
+        //
+        //        button.innerHTML = '⛶ Fullscreen';
+        //        button.style.zIndex = '1000';
+        //        document.body.style.overflow = 'auto';
+        //        isFullscreen = false;
+                
+        //        // Resize chart back to original size
+        //        if (chart) {
+        //            setTimeout(() => {
+        //                chart.setSize(null, 1000); // Back to original height
+        //                chart.reflow(); // Ensure proper rendering
+        //            }, 100);
+        //        }
+        //    }
+        //}
 
         // Handle ESC key to exit fullscreen
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && isFullscreen) {
-                toggleFullscreen();
-            }
-        });
+        //document.addEventListener('keydown', function(event) {
+        //    if (event.key === 'Escape' && isFullscreen) {
+        //        toggleFullscreen();
+        //    }
+        //});
 
         // Handle window resize in fullscreen mode
-        window.addEventListener('resize', function() {
-            if (isFullscreen && chart) {
-                chart.setSize(window.innerWidth, window.innerHeight - 60);
-            }
-        });
+        //window.addEventListener('resize', function() {
+        //    if (isFullscreen && chart) {
+        //        chart.setSize(window.innerWidth, window.innerHeight - 60);
+        //    }
+        //});
         Highcharts.theme = {
             colors: [G000, card, darkred, black, dgray, lgray, white],
             chart: {
