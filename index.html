@@ -87,11 +87,11 @@
         var white = "#FFFFFF";
 
         // Fullscreen functionality for embedded environments
-        //let isFullscreen = false;
-        //let chart; // Store chart reference
-        //let originalStyles = {}; // Store original container styles
+        let isFullscreen = false;
+        let chart; // Store chart reference
+        let originalStyles = {}; // Store original container styles
         function toggleFullscreen() {
-            if (!document.fullscreenElement) {
+        if (!document.fullscreenElement) {
                 document.getElementById('container').requestFullscreen();
             } else {
                 document.exitFullscreen();
@@ -112,47 +112,47 @@
         //            zIndex: container.style.zIndex,
         //            background: container.style.background
         //        };
-                
-                // Enter fullscreen mode
+        //        
+        //        // Enter fullscreen mode
         //        container.classList.add('fullscreen-mode');
         //        button.innerHTML = '✕ Exit Fullscreen';
         //        button.style.zIndex = '10000'; // Ensure button stays on top
-         //       document.body.style.overflow = 'hidden';
-          //      isFullscreen = true;
+        //        document.body.style.overflow = 'hidden';
+        //        isFullscreen = true;
         //        
-                // Get the chart instance and resize it
+        //        // Get the chart instance and resize it
         //        const chartContainer = Highcharts.charts.find(chart => chart && chart.container.parentNode === container);
-         //       if (chartContainer) {
+        //        if (chartContainer) {
         //            chart = chartContainer;
-         //           setTimeout(() => {
+        //            setTimeout(() => {
         //                chart.setSize(window.innerWidth, window.innerHeight - 60); // Account for button
-         //           }, 100);
+        //            }, 100);
         //        }
-         //   } else {
+        //    } else {
         //        // Exit fullscreen mode
-         //       container.classList.remove('fullscreen-mode');
+        //        container.classList.remove('fullscreen-mode');
         //        
-         //       // Restore original styles
+        //        // Restore original styles
         //        Object.keys(originalStyles).forEach(key => {
-         //           if (originalStyles[key]) {
+        //            if (originalStyles[key]) {
         //                container.style[key] = originalStyles[key];
-         //           } else {
+        //            } else {
         //                container.style[key] = '';
-         //           }
+        //            }
         //        });
-                
+        //
         //        button.innerHTML = '⛶ Fullscreen';
         //        button.style.zIndex = '1000';
         //        document.body.style.overflow = 'auto';
         //        isFullscreen = false;
                 
-                // Resize chart back to original size
+        //        // Resize chart back to original size
         //        if (chart) {
-         //           setTimeout(() => {
-           //             chart.setSize(null, 1000); // Back to original height
-          //              chart.reflow(); // Ensure proper rendering
-          //          }, 100);
-         //       }
+        //            setTimeout(() => {
+        //                chart.setSize(null, 1000); // Back to original height
+        //                chart.reflow(); // Ensure proper rendering
+        //            }, 100);
+        //        }
         //    }
         //}
 
@@ -169,7 +169,6 @@
         //        chart.setSize(window.innerWidth, window.innerHeight - 60);
         //    }
         //});
-
         Highcharts.theme = {
             colors: [G000, card, darkred, black, dgray, lgray, white],
             chart: {
@@ -225,7 +224,8 @@
                         integration: 'verlet',
                         friction: -0.90,
                         maxSpeed: 200,
-                        maxIterations: 700
+                        maxIterations: 700,
+                        initialPositions: 'circle'
                     },
                     animation: {
                         duration: 500
@@ -240,18 +240,18 @@
                 },
                 formatter: function () {
                     const additionalInfo = {
-                        'Career Committee': 'Connects families directly with the university’s career development efforts by channeling their insight and support into initiatives that expand student opportunities and strengthen employer relationships.',
+                        'Career Committee': 'Connects families directly with the university\'s career development efforts by channeling their insight and support into initiatives that expand student opportunities and strengthen employer relationships.',
                         'KEY Careers': 'Accelerates student readiness and postgraduation outcomes by guiding early exploration, reducing uncertainty, and connecting academic experiences to real-world career goals.',
                         'Skills Infusion': 'Aligns classroom learning with career readiness by bringing faculty, alumni, and employers together to integrate in-demand workplace competencies into student learning outcomes.',
-                        'Faculty Externships': 'Bridges academia and industry by embedding faculty in real-world work environments, enabling them to bring current, career-relevant insights back into the classroom.',
-                        'Indiana Connection Lounge': 'Activates one-on-one and small-group introductions between students, alumni, and employers—creating intentional, relationship-based pathways to internships and jobs.',
-                        'Practice Interview': 'Equips students with confidence and strategy by offering hands-on mock interviews that simulate real scenarios and sharpen professional communication skills.',
-                        'On Campus Student Employment': 'Creates pathways for financial independence and career exploration while providing departments and employers with adaptable talent that helps drive innovation and operations.',
-                        'Competency Measures': 'Tracks and reinforces students’ career readiness by embedding and assessing NACE Career Competencies across programs, helping students articulate their strengths to employers.',
-                        'Experience Journal': 'Promotes self-awareness and career clarity by guiding students to reflect on how they’re building core competencies through academic, co-curricular, and work-based experiences.',
-                        'County Ambassadors': 'Builds pride and peer-to-peer engagement by empowering students to promote their hometowns and foster meaningful connections across Indiana’s diverse communities.',
-                        'Social Capital Building': 'Develops students’ professional networks through intentional use of university services, programs, and events—helping them form lasting connections that unlock career opportunities.',
-                        'Job Fairs': 'Drives employment outcomes by hosting events that directly connect students with hiring employers, contributing to Ball State’s high placement rates and industry engagement.'
+                        'Faculty Externships': 'Bridges academia and industry by embedding faculty in industry environments, enabling faculty to connect with industry and bring current, career-relevant insights back into the classroom.',
+                        'Indiana Connection Lounge': 'Activates one-on-one and small-group introductions between students, alumni, and employers in a relaxed, approachable environment, creating intentional, relationship-based pathways to internships and jobs.',
+                        'Practice Interview': 'Equips students with confidence and strategy by offering hands-on practice interviews that simulate real scenarios and sharpen professional communication skills, delivered by employers and alumni.',
+                        'On Campus Student Employment': 'An on-campus job is more than a job, it is skill development and training for the workplace while providing Ball State departments with adaptable talent that helps drive innovation and operations.',
+                        'Competency Measures': 'Tracks and reinforces students\' career readiness by embedding and assessing NACE Career Competencies across programs, helping students articulate their strengths to employers.',
+                        'Experience Journal': 'Empowers students to reflect and articulate how they\'re building core competencies through academic, co-curricular, and work-based experiences.',
+                        'County Ambassadors': 'Builds pride and peer-to-peer engagement by empowering students to promote their hometowns and foster meaningful connections across Indiana\'s diverse communities.',
+                        'Social Capital Building': 'Helps students build the necessary skills to strategically build connections and relationships to fully leverage their higher education and form lasting connections that unlock career opportunities.',
+                        'Job Fairs': 'Drives employment outcomes by hosting events that directly connect students with hiring employers, contributing to Ball State\'s high placement rates and industry engagement.'
                         };
 
 
@@ -398,12 +398,16 @@
                     }
                 },
                 nodes: [
-                    { id: 'Faculty', color: card },
-                    { id: 'Students', color: card },
-                    { id: 'Alumni', color: card },
-                    { id: 'Employers', color: card },
-                    { id: 'Industry', color: card },
-                    { id: 'Parents', color: card },
+                    // Population nodes (red) positioned in outer circle
+                    { id: 'Faculty', color: card, x: -250, y: -150 },
+                    { id: 'Students', color: card, x: 0, y: -300 },
+                    { id: 'Alumni', color: card, x: 250, y: -150 },
+                    { id: 'Employers', color: card, x: 250, y: 150 },
+                    { id: 'Industry', color: card, x: 0, y: 300 },
+                    { id: 'Parents', color: card, x: -250, y: 150 },
+                    { id: 'All Populations', color: darkred, x: -400, y: 0 },
+                    
+                    // Program nodes (gray) - let them position naturally in the center
                     { id: 'Career Committee', color: lgray },
                     { id: 'Skills Infusion', color: lgray },
                     { id: 'Faculty Externships', color: lgray },
@@ -415,8 +419,7 @@
                     { id: 'Practice Interview', color: lgray },
                     { id: 'On Campus Student Employment', color: lgray },
                     { id: 'KEY Careers', color: lgray },
-                    { id: 'Job Fairs', color: lgray },
-                    { id: 'All Populations', color: darkred}
+                    { id: 'Job Fairs', color: lgray }
                 ]
             }]
         });
