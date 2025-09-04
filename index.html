@@ -272,7 +272,7 @@
                     };
 
                     const link = links[this.key] ? `<br><a href="${links[this.key]}" target="_blank" style="display: inline-block; text-align: center; width: 100%; margin: 0 auto;">Learn more</a>` : '';
-                    return `<b>${this.key}</b><br>${additionalInfo[this.key] || 'No additional information available.'}${link}`;
+                    return `<b>${this.key}</b><br>${additionalInfo[this.key] || ''}${link}`;
                 }
             },
             series: [{
