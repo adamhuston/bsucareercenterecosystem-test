@@ -1,24 +1,56 @@
 <html>
 <head>
+    
+<!--CDNs for highcharts
+    Will be rate limited if overused
+
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/networkgraph.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+-->
+    <script src="./public/js/highcharts.js"> </script>
+    <script src="./public/js/networkgraph.js"></script>
+    <script src="./public/js/accessibility.js"></script>
+    <script src="./public/js/exporting.js"></script>
+    <script src="./public/js/export-data.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-
+        body {
+            margin: 0;
+            font-size: 1rem; /* Base font size */
+        }
+        figure {
+            margin: 0;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0;
+            margin-inline-end: 0;
+        }
         br {
             display: block;
-            margin: 5px 0;
+            margin: 0.3125rem 0; /* 5px converted to rem */
         }
 
         #container {
             width: 100%;
-            height: 1000px;
+            height: 95vh;
             margin: 0 auto;
             overflow: hidden;
+            font-size: 1rem; /* Changed from 2em to 1rem */
         }
-
         .highcharts-tooltip span {
-            pointer-events: auto; /* Allow interaction with tooltip content */
-            padding: 6px;
+            pointer-events: auto;
+            padding: 0.375rem; /* 6px converted to rem */
+            min-width: 18.75rem; /* 300px converted to rem */
+            max-width: 25rem !important; /* 400px converted to rem */
+            word-wrap: break-word !important;
+            word-break: break-word !important;
+            white-space: normal !important;
+            display: block !important;
+            box-sizing: border-box !important;
         }
 
         .highcharts-point {
@@ -28,56 +60,30 @@
         .highcharts-point:active {
             cursor: grabbing;
         }
-         /* Fullscreen button styles */
-        #fullscreen-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            background: #BA0C2F;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s ease;
-        }
-        
-        #fullscreen-btn:hover {
-            background: #79242F;
-        }
-        
-        /* Fullscreen container styles */
-        .fullscreen-mode {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            z-index: 9999 !important;
-            background: white !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-        
-        /* Hide scrollbars in fullscreen */
-        .fullscreen-mode body {
-            overflow: hidden !important;
+
+        @media screen and (max-width: 48rem) { /* 768px converted to rem */
+            #container {
+                height: 90vh;
+                font-size: 0.875rem; /* Smaller base font for mobile */
+            }
+            .highcharts-tooltip span {
+                min-width: 15rem; /* 240px converted to rem */
+                max-width: 20rem !important; /* 320px converted to rem */
+            }
         }
     </style>
 </head>
 
 <body>
-    <button id="fullscreen-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-
-    <div id="container"></div>
-
+    <figure>
+        <div id="container">
+        </div>
+        <p class="highcharts-description" style="display:none;">
+            The following chart demonstrates some of the relationships between Career Center programs and stakeholder populations. The network graph visualizes relationships between entities, represented as nodes (points) and edges (lines connecting the points). In this example, the network graph illustrates the connections between various populations (such as Industry, Alumni, Faculty, Students, Employers, and Parents) and programs (like Career Committee, KEY Careers, Skills Infusion, Faculty Externships, Indiana Connection Lounge, Practice Interview, On Campus Student Employment, Competency Measures, Experience Journal, County Ambassadors, Social Capital Building, and Job Fairs) within the Career Center Ecosystem. Users can interact with the graph by clicking on population nodes to reveal their connections to relevant programs. The layout is dynamic and adjusts based on user interactions.
+        </p>
+    </figure>
     <script>
         
-
         // Highcharts configuration
         var G000 = "#33ffbd";
         var card = "#BA0C2F";
@@ -87,115 +93,28 @@
         var lgray = "#E6E7E8";
         var white = "#FFFFFF";
 
-        // Fullscreen functionality for embedded environments
-        let isFullscreen = false;
-        let chart; // Store chart reference
-        let originalStyles = {}; // Store original container styles
-        function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-                document.getElementById('container').requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
-        }
-        //function toggleFullscreen() {
-        //    const container = document.getElementById('container');
-        //    const button = document.getElementById('fullscreen-btn');
-        //    
-        //    if (!isFullscreen) {
-        //        // Store original styles
-        //        originalStyles = {
-        //            position: container.style.position,
-        //            top: container.style.top,
-        //            left: container.style.left,
-        //            width: container.style.width,
-        //            height: container.style.height,
-        //            zIndex: container.style.zIndex,
-        //            background: container.style.background
-        //        };
-        //        
-        //        // Enter fullscreen mode
-        //        container.classList.add('fullscreen-mode');
-        //        button.innerHTML = '✕ Exit Fullscreen';
-        //        button.style.zIndex = '10000'; // Ensure button stays on top
-        //        document.body.style.overflow = 'hidden';
-        //        isFullscreen = true;
-        //        
-        //        // Get the chart instance and resize it
-        //        const chartContainer = Highcharts.charts.find(chart => chart && chart.container.parentNode === container);
-        //        if (chartContainer) {
-        //            chart = chartContainer;
-        //            setTimeout(() => {
-        //                chart.setSize(window.innerWidth, window.innerHeight - 60); // Account for button
-        //            }, 100);
-        //        }
-        //    } else {
-        //        // Exit fullscreen mode
-        //        container.classList.remove('fullscreen-mode');
-        //        
-        //        // Restore original styles
-        //        Object.keys(originalStyles).forEach(key => {
-        //            if (originalStyles[key]) {
-        //                container.style[key] = originalStyles[key];
-        //            } else {
-        //                container.style[key] = '';
-        //            }
-        //        });
-        //
-        //        button.innerHTML = '⛶ Fullscreen';
-        //        button.style.zIndex = '1000';
-        //        document.body.style.overflow = 'auto';
-        //        isFullscreen = false;
-                
-        //        // Resize chart back to original size
-        //        if (chart) {
-        //            setTimeout(() => {
-        //                chart.setSize(null, 1000); // Back to original height
-        //                chart.reflow(); // Ensure proper rendering
-        //            }, 100);
-        //        }
-        //    }
-        //}
+        const colorLegend = [
+            { color: "#BA0C2F", name: 'Populations' },
+            { color: "#E6E7E8", name: 'Programs' },
+        ];
 
-        // Handle ESC key to exit fullscreen
-        //document.addEventListener('keydown', function(event) {
-        //    if (event.key === 'Escape' && isFullscreen) {
-        //        toggleFullscreen();
-        //    }
-        //});
-
-        // Handle window resize in fullscreen mode
-        //window.addEventListener('resize', function() {
-        //    if (isFullscreen && chart) {
-        //        chart.setSize(window.innerWidth, window.innerHeight - 60);
-        //    }
-        //});
         Highcharts.theme = {
             colors: [G000, card, darkred, black, dgray, lgray, white],
             chart: {
                 backgroundColor: white,
                 style: {
                     fontFamily: 'Open Sans, Arial, sans-serif',
-                    fontSize: '1.2em'
+                    fontSize: '1em'
                 }
             },
             title: {
                 style: {
                     color: black
                 }
-            },
+            },  
             subtitle: {
                 style: {
                     color: black,
-
-                }
-            },
-            legend: {
-                itemStyle: {
-                    color: black
-                },
-                itemHoverStyle: {
-                    color: black
                 }
             }
         };
@@ -204,17 +123,51 @@
         Highcharts.chart('container', {
             chart: {
                 type: 'networkgraph',
-                marginTop: 80
+                marginTop: 80,
+                events: {
+                    afterRender() {
+                        this.series.forEach(s => {
+                            if (s.points) {
+                                s.points.forEach(p=> {
+                                    p.graphic.element.removeAttribute('aria-hidden')
+                                })
+                            }
+                        }); 
+                    }
+                },
+                
+            },
+            legend: {
+                enabled: true,
+                floating: true,
+                align: 'left',
+                verticalAlign: 'top',
+                layout: 'vertical',
+                events: {
+                    itemClick: function () {
+                        return false;
+                    }
+                }
             },
             style: {
                 backgroundColor: dgray,
                 fontFamily: 'monospace',
-                fontSize: '1.2em'
+                fontSize: '16px'
             },
             title: {
-                text: ''
+                enabled: false,
+                text: null
             },
             credits: { enabled: false },
+            exporting: {
+                buttons: {
+                    contextButton: {
+                        menuItems: [
+                            'viewFullscreen',
+                        ]
+                    }
+                }
+            },
             plotOptions: {
                 networkgraph: {
                     keys: ['from', 'to', 'color'],
@@ -234,10 +187,12 @@
                 }
             },
             tooltip: {
-                useHTML: true, // Enable HTML rendering for tooltips
+                useHTML: true,
                 style: {
-                    width: '400px',
+                    fontSize: '0.875rem', /* Changed from 0.5em to rem */
                     textAlign: 'center',
+                    overflow: 'none',
+                    pointerEvents: 'auto'
                 },
                 formatter: function () {
                     const additionalInfo = {
@@ -283,15 +238,40 @@
                     return `<b>${this.key}</b><br>${additionalInfo[this.key] || ''}${link}`;
                 }
             },
+            
+            xAxis: {
+                visible: false,
+                startOnTick: false,
+                endOnTick: false
+            },
+            yAxis: {
+                visible: false,
+                startOnTick: false,
+                endOnTick: false
+            },
             series: [{
+                name: 'Career Center Programs and Populations',
+                showInLegend: false,
                 marker: {
-                    radius: 32,
+                    radius: 10,
+                    symbol: 'circle',
+                    lineWidth: 1,
+                    lineColor: 'black'
                 },
                 dataLabels: {
                     enabled: true,
-                    linkFormat: '',
-                    allowOverlap: true
+                    allowOverlap: true,
+                    style: {
+                        // textOutline: 'none',
+                        fontSize: '0.875rem',
+                    },
+                    linkFormat: '', // Disable default link labels
+
                 },
+                accessibility: {
+                    exposeAsGroupOnly: false,
+                    description: 'Data points should be accessible'
+                },                
                 data: [],
                 events: {
                     click: function (event) {
@@ -407,30 +387,49 @@
                 },
                 nodes: [
                     // Population nodes (red) positioned in outer circle
-                    { id: 'Faculty', color: card, x: -250, y: -150 },
-                    { id: 'Students', color: card, x: 0, y: -300 },
-                    { id: 'Alumni', color: card, x: 250, y: -150 },
-                    { id: 'Employers', color: card, x: 250, y: 150 },
-                    { id: 'Industry', color: card, x: 0, y: 300 },
-                    { id: 'Parents', color: card, x: -250, y: 150 },
-                    { id: 'All Populations', color: darkred, x: -400, y: 0 },
-                    
+                    { name: 'Faculty', id: 'Faculty', color: card, x: -250, y: -150 },
+                    { name: 'Students', id: 'Students', color: card, x: 0, y: -300 },
+                    { name: 'Alumni', id: 'Alumni', color: card, x: 250, y: -150 },
+                    { name: 'Employers', id: 'Employers', color: card, x: 250, y: 150 },
+                    { name: 'Industry', id: 'Industry', color: card, x: 0, y: 300 },
+                    { name: 'Parents', id: 'Parents', color: card, x: -250, y: 150 },
+                    { name: 'All Populations', id: 'All Populations', color: darkred, x: -400, y: 0 },
+
                     // Program nodes (gray) - let them position naturally in the center
-                    { id: 'Career Committee', color: lgray },
-                    { id: 'Skills Infusion', color: lgray },
-                    { id: 'Faculty Externships', color: lgray },
-                    { id: 'Experience Journal', color: lgray },
-                    { id: 'Social Capital Building', color: lgray },
-                    { id: 'Competency Measures', color: lgray },
-                    { id: 'Indiana Connection Lounge', color: lgray },
-                    { id: 'County Ambassadors', color: lgray },
-                    { id: 'Practice Interview', color: lgray },
-                    { id: 'On Campus Student Employment', color: lgray },
-                    { id: 'KEY Careers', color: lgray },
-                    { id: 'Job Fairs', color: lgray }
-                ]
-            }]
+                    { name: 'Career Committee', id: 'Career Committee', color: lgray },
+                    { name: 'Skills Infusion', id: 'Skills Infusion', color: lgray },
+                    { name: 'Faculty Externships', id: 'Faculty Externships', color: lgray },
+                    { name: 'Experience Journal', id: 'Experience Journal', color: lgray },
+                    { name: 'Social Capital Building', id: 'Social Capital Building', color: lgray },
+                    { name: 'Competency Measures', id: 'Competency Measures', color: lgray },
+                    { name: 'Indiana Connection Lounge', id: 'Indiana Connection Lounge', color: lgray },
+                    { name: 'County Ambassadors', id: 'County Ambassadors', color: lgray },
+                    { name: 'Practice Interview', id: 'Practice Interview', color: lgray },
+                    { name: 'On Campus Student Employment', id: 'On Campus Student Employment', color: lgray },
+                    { name: 'KEY Careers', id: 'KEY Careers', color: lgray },
+                    { name: 'Job Fairs', id: 'Job Fairs', color: lgray }
+                ],
+            },
+            ...colorLegend.map((entry, i) => ({
+                // use an inert series type so nothing renders
+                type: 'scatter',
+                name: entry.name,
+                color: entry.color,
+                showInLegend: true,
+                enableMouseTracking: false,
+                data: [],             // no points -> legend only
+                marker: {
+                    symbol: 'circle',
+                    radius: 6
+                },
+                legendIndex: i,
+
+            }))
+            ],
+            
+            
         });
+
     </script>
 </body>
 </html>
